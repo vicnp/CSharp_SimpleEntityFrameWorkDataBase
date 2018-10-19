@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProfessorDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Professor">
+          <Key>
+            <PropertyRef Name="IdProfessor" />
+          </Key>
+          <Property Name="IdProfessor" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="AreaAtuacao" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Especialidade" Type="varchar" MaxLength="100" />
+          <Property Name="TitulacaoID" Type="int" />
+        </EntityType>
+        <EntityType Name="Titulacao">
+          <Key>
+            <PropertyRef Name="IdTitulacao" />
+          </Key>
+          <Property Name="IdTitulacao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="FK_Professor_Titulacao">
+          <End Role="Titulacao" Type="Self.Titulacao" Multiplicity="0..1" />
+          <End Role="Professor" Type="Self.Professor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Titulacao">
+              <PropertyRef Name="IdTitulacao" />
+            </Principal>
+            <Dependent Role="Professor">
+              <PropertyRef Name="TitulacaoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ProfessorDBModelStoreContainer">
+          <EntitySet Name="Professor" EntityType="Self.Professor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Titulacao" EntityType="Self.Titulacao" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Professor_Titulacao" Association="Self.FK_Professor_Titulacao">
+            <End Role="Titulacao" EntitySet="Titulacao" />
+            <End Role="Professor" EntitySet="Professor" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProfessorDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ProfessorDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Professores" EntityType="ProfessorDBModel.Professor" />
+          <EntitySet Name="Titulacoes" EntityType="ProfessorDBModel.Titulacao" />
+          <AssociationSet Name="FK_Professor_Titulacao" Association="ProfessorDBModel.FK_Professor_Titulacao">
+            <End Role="Titulacao" EntitySet="Titulacoes" />
+            <End Role="Professor" EntitySet="Professores" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Professor">
+          <Key>
+            <PropertyRef Name="IdProfessor" />
+          </Key>
+          <Property Name="IdProfessor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="AreaAtuacao" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Especialidade" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="TitulacaoID" Type="Int32" />
+          <NavigationProperty Name="Titulacao" Relationship="ProfessorDBModel.FK_Professor_Titulacao" FromRole="Professor" ToRole="Titulacao" />
+        </EntityType>
+        <EntityType Name="Titulacao">
+          <Key>
+            <PropertyRef Name="IdTitulacao" />
+          </Key>
+          <Property Name="IdTitulacao" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descricao" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Professores" Relationship="ProfessorDBModel.FK_Professor_Titulacao" FromRole="Titulacao" ToRole="Professor" />
+        </EntityType>
+        <Association Name="FK_Professor_Titulacao">
+          <End Type="ProfessorDBModel.Titulacao" Role="Titulacao" Multiplicity="0..1" />
+          <End Type="ProfessorDBModel.Professor" Role="Professor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Titulacao">
+              <PropertyRef Name="IdTitulacao" />
+            </Principal>
+            <Dependent Role="Professor">
+              <PropertyRef Name="TitulacaoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProfessorDBModelStoreContainer" CdmEntityContainer="ProfessorDBEntities">
+          <EntitySetMapping Name="Professores">
+            <EntityTypeMapping TypeName="ProfessorDBModel.Professor">
+              <MappingFragment StoreEntitySet="Professor">
+                <ScalarProperty Name="TitulacaoID" ColumnName="TitulacaoID" />
+                <ScalarProperty Name="Especialidade" ColumnName="Especialidade" />
+                <ScalarProperty Name="AreaAtuacao" ColumnName="AreaAtuacao" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="IdProfessor" ColumnName="IdProfessor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Titulacoes">
+            <EntityTypeMapping TypeName="ProfessorDBModel.Titulacao">
+              <MappingFragment StoreEntitySet="Titulacao">
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="IdTitulacao" ColumnName="IdTitulacao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
